@@ -7,13 +7,20 @@ const utils = require('./utils');
 // Enable hiding of API Key
 require('dotenv').config();
 
-const TERM = '1181';  // Winter 2017
+const TERM = getCurrentTerm(); // '1181';  // Winter 2017
 const coreqExceptions = ['HLTH333'];
 
 // instantiate client
 const uwclient = new watApi({
 	API_KEY : process.env.API_KEY
 });
+
+function getCurrentTerm() {
+	uwclient.get('/terms/list.json', function(err, res) {
+		if(err) return callback(null);
+		return callback(res.data.current_term);
+	})
+}
 
 function getInstructor(instructor) {
 	if (!instructor || !instructor.length) return '';
